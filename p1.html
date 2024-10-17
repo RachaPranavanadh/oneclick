@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Title</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+        <!-- Bootstrap CSS v5.2.1 -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <style>
+          body {
+            background-color: bisque;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+          }
+          .search-results {
+            display: none;
+            position: absolute;
+            z-index: 1000;
+            background-color: white;
+            border: 1px solid #ccc;
+            max-height: 200px;
+            overflow-y: auto;
+            width: 100%;
+          }
+          .search-results .item {
+            padding: 10px;
+            cursor: pointer;
+          }
+          .search-results .item:hover {
+            background-color: #eee;
+          }
+        </style>
+    </head>
+
+    <body>
+        <header>
+          <nav class="navbar navbar-expand-lg bg-body-tertiary"data-bs-theme="dark">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#"><img src="oneclick.jpg"  width="30" height="24" class="d-inline-block align-text-top">OneClick</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                  </li>
+                </ul>
+                <form class="d-flex" role="search">
+                  <input id="searchBar" class="form-control me-2" type="search" placeholder="Search for products" aria-label="Search" onkeyup="searchProducts()">
+                  <div id="searchResults" class="search-results"></div>
+                </form>
+              </div>
+            </div>
+          </nav>
+        </header>
+
+        <main class="container mt-5">
+            <!-- Products Section -->
+            <div class="row">
+                <!-- Product 1 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="download (1).jpeg" class="card-img-top" alt="Apple" />
+                        <div class="card-body">
+                            <h5 class="card-title">Fresh Apples</h5>
+                            <p class="card-text">Crisp and fresh apples. Perfect for a healthy snack.</p>
+                            <p class="text-success">₹12/kg</p>
+                            <button class="btn btn-primary" onclick="addToCart('Fresh Apples', 12)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="download (2).jpeg" class="card-img-top" alt="Tomato" />
+                        <div class="card-body">
+                            <h5 class="card-title">Fresh Tomatoes</h5>
+                            <p class="card-text">Juicy, ripe tomatoes perfect for salads and cooking.</p>
+                            <p class="text-success">₹15/kg</p>
+                            <button class="btn btn-primary" onclick="addToCart('Fresh Tomatoes', 15)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="download (3).jpeg" class="card-img-top" alt="Banana" />
+                        <div class="card-body">
+                            <h5 class="card-title">Bananas</h5>
+                            <p class="card-text">Sweet bananas that are perfect for snacks or smoothies.</p>
+                            <p class="text-success">₹30/kg</p>
+                            <button class="btn btn-primary" onclick="addToCart('Bananas', 30)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bill Section -->
+            <div class="row">
+                <div class="col-12">
+                    <h4>Shopping Cart</h4>
+                    <ul id="cartItems" class="list-group mb-3"></ul>
+                    <button class="btn btn-success" onclick="generateBill()">Generate Bill</button>
+                </div>
+            </div>
+
+            <!-- Bill Format Section -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h4>Bill</h4>
+                    <div id="billDetails" class="border p-3" style="display: none;">
+                        <h5>Itemized Bill</h5>
+                        <ul id="billItems" class="list-group mb-3"></ul>
+                        <p class="font-weight-bold">Total: ₹<span id="billTotal"></span></p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bootstrap JavaScript Libraries -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+
+        <script>
+            let cart = [];
+            let totalPrice = 0;
+            const products = [
+                { name: 'Fresh Apples', price: 12 },
+                { name: 'Fresh Tomatoes', price: 15 },
+                { name: 'Bananas', price: 30 },
+            ];
+
+            // Function to add items to the cart
+            function addToCart(productName, price) {
+                cart.push({ name: productName, price: price });
+                totalPrice += price;
+
+                // Update the cart items list
+                let cartItems = document.getElementById('cartItems');
+                let newItem = document.createElement('li');
+                newItem.className = 'list-group-item';
+                newItem.textContent = productName + ' - ₹' + price;
+                cartItems.appendChild(newItem);
+            }
+
+            // Function to generate bill
+            function generateBill() {
+                let billDetails = document.getElementById('billDetails');
+                let billItems = document.getElementById('billItems');
+                billItems.innerHTML = ''; // Clear previous bill items
+
+                // Add each cart item to the bill
+                cart.forEach(item => {
+                    let newBillItem = document.createElement('li');
+                    newBillItem.className = 'list-group-item';
+                    newBillItem.textContent = item.name + ' - ₹' + item.price;
+                    billItems.appendChild(newBillItem);
+                });
+
+                // Update total on bill
+                document.getElementById('billTotal').textContent = totalPrice;
+
+                // Show the bill section
+                billDetails.style.display = 'block';
+            }
+
+            // Function to search and display matching products
+            function searchProducts() {
+                const input = document.getElementById('searchBar').value.toLowerCase();
+                const searchResults = document.getElementById('searchResults');
+
+                searchResults.innerHTML = ''; // Clear previous results
+                searchResults.style.display = 'none'; // Hide by default
+
+                if (input) {
+                    const filteredProducts = products.filter(product => product.name.toLowerCase().includes(input));
+
+                    if (filteredProducts.length > 0) {
+                        searchResults.style.display = 'block'; // Show results if there are matches
+
+                        filteredProducts.forEach(product => {
+                            const item = document.createElement('div');
+                            item.className = 'item';
+                            item.textContent = product.name + ' - ₹' + product.price;
+                            item.onclick = () => {
+                                addToCart(product.name, product.price);
+                                searchResults.style.display = 'none';
+                                document.getElementById('searchBar').value = ''; // Clear search input after adding to cart
+                            };
+                            searchResults.appendChild(item);
+                        });
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>
+
+
